@@ -97,3 +97,41 @@ async function initSIWE(address, userAgent, caId) {
     throw error;
   }
 }
+async function authenticateSIWE(message, signature, userAgent, caId) {
+  try {
+    const response = await axios.post(
+      'https://privy.babylon.market/api/v1/siwe/authenticate',
+      {
+        message,
+        signature,
+        chainId: 'eip155:1',
+        walletClientType: 'metamask',
+        connectorType: 'injected',
+        mode: 'login-or-sign-up'
+      },
+      {
+        headers: {
+          'accept': 'application/json',
+          'accept-language': 'en-US,en;q=0.9',
+          'content-type': 'application/json',
+          'privy-app-id': PRIVY_APP_ID,
+          'privy-ca-id': caId,
+          'privy-client': 'react-auth:3.7.0',
+          'origin': 'https://babylon.market',
+          'referer': 'https://babylon.market/',
+          'user-agent': userAgent,
+          'sec-ch-ua': '"Chromium";v="142", "Brave";v="142", "Not_A Brand";v="99"',
+          'sec-ch-ua-mobile': '?0',
+          'sec-ch-ua-platform': '"Windows"',
+          'sec-fetch-dest': 'empty',
+          'sec-fetch-mode': 'cors',
+          'sec-fetch-site': 'same-site',
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    logger.error(`Failed to authenticate: ${error.message}`);
+    throw error;
+  }
+}
