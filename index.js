@@ -423,3 +423,17 @@ async function main() {
         await delay(delayTime);
       }
     }
+    console.log(`\n${colors.cyan}${colors.bold}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${colors.reset}`);
+    logger.info(`Total accounts created: ${successCount}`);
+    if (failCount > 0) {
+      logger.warn(`Failed accounts: ${failCount}`);
+    }
+    logger.info(`Wallets saved to: ${WALLETS_FILE}`);
+    console.log(`${colors.cyan}${colors.bold}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${colors.reset}\n`);
+    
+  } catch (error) {
+    logger.error(`Error in main: ${error.message}`);
+  }
+}
+
+main().catch(console.error);
