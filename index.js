@@ -274,3 +274,28 @@ async function saveWallet(walletData) {
     logger.error(`Failed to save wallet: ${error.message}`);
   }
 }
+async function registerAccount(referralCode) {
+  const userAgent = getRandomUserAgent();
+  const caId = generateCAID();
+  
+  try {
+    logger.loading('Creating new wallet...');
+    const wallet = ethers.Wallet.createRandom();
+    logger.info(`Address: ${wallet.address}`);
+
+    logger.loading('Initializing SIWE...');
+    const siweData = await initSIWE(wallet.address, userAgent, caId);
+    logger.info(`Nonce: ${siweData.nonce.substring(0, 10)}...`);
+
+    const siweMessage = `babylon.market wants you to sign in with your Ethereum account:
+${wallet.address}
+
+By signing, you are proving you own this wallet and logging in. This does not initiate a transaction or cost any fees.
+
+URI: https://babylon.market
+Version: 1
+Chain ID: 1
+Nonce: ${siweData.nonce}
+Issued At: ${new Date().toISOString()}
+Resources:
+- https://privy.io`;
