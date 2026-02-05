@@ -299,3 +299,32 @@ Nonce: ${siweData.nonce}
 Issued At: ${new Date().toISOString()}
 Resources:
 - https://privy.io`;
+
+    logger.loading('Signing message...');
+    const signature = await wallet.signMessage(siweMessage);
+    logger.info(`Signature: ${signature.substring(0, 20)}...`);
+
+    logger.loading('Authenticating...');
+    const authData = await authenticateSIWE(siweMessage, signature, userAgent, caId);
+    const token = authData.token;
+    const userId = authData.user.id;
+    
+    logger.success('Authentication successful!');
+    logger.info(`User ID: ${userId}`);
+
+    await delay(1000);
+
+    logger.loading('Generating profile...');
+    const profileData = await generateProfile(userAgent, token);
+    logger.info(`Generated username: ${profileData.username}`);
+
+    let username = profileData.username;
+    let isAvailable = await checkUsername(username, userAgent, token);
+    
+    if (!isAvailable) {
+      username = `${username}_${Math.floor(Math.random() * 9999)}`;
+      logger.warn(`Username taken, using: ${username}`);
+    }
+
+    const profileImageIndex = getRandomProfileImage();
+    const bannerIndex = getRandomBannerImage();
