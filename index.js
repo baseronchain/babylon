@@ -34,7 +34,21 @@ const USER_AGENTS = [
 function getRandomUserAgent() {
   return USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)];
 }
-
+function generateRandomBio() {
+  const bios = [
+    "Yolo, but make it blockchain 🦍💸",
+    "Web3 enthusiast | Crypto native 🚀",
+    "Building the future, one block at a time ⛓️",
+    "DeFi maximalist | HODL forever 💎🙌",
+    "Exploring the metaverse 🌐✨",
+    "NFT collector | Digital artist 🎨",
+    "Blockchain believer | Decentralization advocate 🔐",
+    "Crypto trader | Market watcher 📈",
+    "Smart contract developer | Web3 builder 👨‍💻",
+    "Token hunter | Airdrop farmer 🌾"
+  ];
+  return bios[Math.floor(Math.random() * bios.length)];
+}
 function generateRandomName() {
   const adjectives = ['Cool', 'Smart', 'Fast', 'Brave', 'Bold', 'Quick', 'Wise', 'Wild', 'Epic', 'Mega'];
   const nouns = ['Tiger', 'Eagle', 'Dragon', 'Wolf', 'Shark', 'Lion', 'Bear', 'Hawk', 'Fox', 'Panther'];
