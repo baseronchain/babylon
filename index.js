@@ -361,3 +361,30 @@ Resources:
    const position = await getWaitlistPosition(userId, userAgent
     const profileImageIndex = getRandomProfileImage();
     const bannerIndex = getRandomBannerImage();
+    const walletData = {
+      address: wallet.address,
+      privateKey: wallet.privateKey,
+      mnemonic: wallet.mnemonic.phrase,
+      username: username,
+      userId: userId,
+      referralCode: referralCode,
+      inviteCode: waitlistData?.inviteCode || username,
+      points: position?.points || waitlistData?.points || 0,
+      waitlistPosition: position?.waitlistPosition || waitlistData?.waitlistPosition || 'Unknown',
+      createdAt: new Date().toISOString()
+    };
+    
+    await saveWallet(walletData);
+    
+    logger.success('✅ Registration completed successfully!\n');
+    
+    return walletData;
+    
+  } catch (error) {
+    logger.error(`Registration failed: ${error.message}`);
+    if (error.response?.data) {
+      logger.error(`Response: ${JSON.stringify(error.response.data)}`);
+    }
+    return null;
+  }
+}
