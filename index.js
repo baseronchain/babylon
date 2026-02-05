@@ -325,6 +325,39 @@ Resources:
       username = `${username}_${Math.floor(Math.random() * 9999)}`;
       logger.warn(`Username taken, using: ${username}`);
     }
+   logger.loading('Signing up user...');
+   const signupData = {
+     username: username,
+     displayName: profileData.name || username,
+     bio: profileData.bio || generateRandomBio(),
+     profileImageUrl: `https://babylon.market/assets/user-profiles/profile-${profileImageIndex}.jpg`,
+     coverImageUrl: `https://babylon.market/assets/user-banners/banner-${bannerIndex}.jpg`,
+     importedFrom: null,
+     twitterId: null,
+     twitterUsername: null,
+     farcasterFid: null,
+     farcasterUsername: null,
+     tosAccepted: true,
+     privacyPolicyAccepted: true,
+     referralCode: referralCode,
+     identityToken: authData.identity_token
+   };
+   
+   const signupResult = await signupUser(signupData, token, userAgent);
+   logger.success(`User created: @${username}`);
 
+   await delay(1500);
+
+   logger.loading('Joining waitlist...');
+   const waitlistData = await markWaitlist(userId, referralCode, token, userAgent);
+   
+   if (waitlistData) {
+     logger.success(`Waitlist position: ${waitlistData.waitlistPosition}`);
+     logger.success(`Points earned: ${waitlistData.points}`);
+     logger.success(`Invite code: ${waitlistData.inviteCode}`);
+   }
+
+   await delay(1000);
+   const position = await getWaitlistPosition(userId, userAgent
     const profileImageIndex = getRandomProfileImage();
     const bannerIndex = getRandomBannerImage();
