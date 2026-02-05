@@ -13,3 +13,16 @@ const colors = {
   bold: "\x1b[1m",
   magenta: "\x1b[35m",
 };
+const logger = {
+  info: (msg) => console.log(`${colors.white}[✓] ${msg}${colors.reset}`),
+  warn: (msg) => console.log(`${colors.yellow}[⚠] ${msg}${colors.reset}`),
+  error: (msg) => console.log(`${colors.red}[✗] ${msg}${colors.reset}`),
+  success: (msg) => console.log(`${colors.green}[✅] ${msg}${colors.reset}`),
+  loading: (msg) => console.log(`${colors.cyan}[→] ${msg}${colors.reset}`),
+  banner: () => {
+    console.log(`${colors.cyan}${colors.bold}`);
+    console.log(`--------------------------------------`);
+    console.log(`    Babylon SATSET   `);
+    console.log(`--------------------------------------${colors.reset}`);
+  },
+};
