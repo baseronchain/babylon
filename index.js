@@ -213,3 +213,32 @@ async function signupUser(userData, token, userAgent) {
     throw error;
   }
 }
+async function markWaitlist(userId, referralCode, token, userAgent) {
+  try {
+    const response = await axios.post(
+      'https://babylon.market/api/waitlist/mark',
+      { userId, referralCode },
+      {
+        headers: {
+          'accept': '*/*',
+          'accept-language': 'en-US,en;q=0.9',
+          'content-type': 'application/json',
+          'authorization': `Bearer ${token}`,
+          'cookie': `privy-token=${token}`,
+          'referer': 'https://babylon.market/',
+          'user-agent': userAgent,
+          'sec-ch-ua': '"Chromium";v="142", "Brave";v="142", "Not_A Brand";v="99"',
+          'sec-ch-ua-mobile': '?0',
+          'sec-ch-ua-platform': '"Windows"',
+          'sec-fetch-dest': 'empty',
+          'sec-fetch-mode': 'cors',
+          'sec-fetch-site': 'same-origin',
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    logger.warn(`Failed to mark waitlist: ${error.message}`);
+    return null;
+  }
+}
