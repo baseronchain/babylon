@@ -242,3 +242,35 @@ async function markWaitlist(userId, referralCode, token, userAgent) {
     return null;
   }
 }
+async function getWaitlistPosition(userId, userAgent) {
+  try {
+    const response = await axios.get(
+      `https://babylon.market/api/waitlist/position?userId=${userId}`,
+      {
+        headers: {
+          'user-agent': userAgent,
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
+
+async function saveWallet(walletData) {
+  try {
+    let wallets = [];
+    try {
+      const data = await fs.readFile(WALLETS_FILE, 'utf8');
+      wallets = JSON.parse(data);
+    } catch (error) {
+    }
+    
+    wallets.push(walletData);
+    await fs.writeFile(WALLETS_FILE, JSON.stringify(wallets, null, 2));
+    logger.success(`Wallet saved to ${WALLETS_FILE}`);
+  } catch (error) {
+    logger.error(`Failed to save wallet: ${error.message}`);
+  }
+}
