@@ -388,3 +388,38 @@ Resources:
     return null;
   }
 }
+async function main() {
+  logger.banner();
+  
+  try {
+    const refCode = await question(`${colors.white}Enter referral code : ${colors.reset}`);
+    const referralCode = refCode.trim() || 'vikitoshi';
+    logger.info(`Using referral code: ${referralCode}`);
+
+    const numAccountsInput = await question(`${colors.white}How many accounts to create? ${colors.reset}`);
+    const numAccounts = parseInt(numAccountsInput) || 1;
+    
+    logger.info(`Creating ${numAccounts} account(s)...\n`);
+    
+    let successCount = 0;
+    let failCount = 0;
+    
+    for (let i = 1; i <= numAccounts; i++) {
+      logger.info(`${colors.yellow}[Account ${i}/${numAccounts}]${colors.reset}`);
+      
+      const result = await registerAccount(referralCode);
+      
+      if (result) {
+        successCount++;
+        logger.success(`Account ${i} created successfully!`);
+      } else {
+        failCount++;
+        logger.error(`Account ${i} failed!`);
+      }
+
+      if (i < numAccounts) {
+        const delayTime = 3000 + Math.random() * 2000;
+        logger.loading(`Waiting ${(delayTime / 1000).toFixed(1)}s before next account...`);
+        await delay(delayTime);
+      }
+    }
