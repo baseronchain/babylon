@@ -165,3 +165,22 @@ async function generateProfile(userAgent, token) {
     };
   }
 }
+async function checkUsername(username, userAgent, token) {
+  try {
+    const response = await axios.get(
+      `https://babylon.market/api/onboarding/check-username?username=${username}`,
+      {
+        headers: {
+          'accept': '*/*',
+          'accept-language': 'en-US,en;q=0.9',
+          'cookie': `privy-token=${token}`,
+          'referer': 'https://babylon.market/',
+          'user-agent': userAgent,
+        }
+      }
+    );
+    return response.data.available;
+  } catch (error) {
+    return false;
+  }
+}
