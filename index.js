@@ -135,3 +135,33 @@ async function authenticateSIWE(message, signature, userAgent, caId) {
     throw error;
   }
 }
+async function generateProfile(userAgent, token) {
+  try {
+    const response = await axios.get(
+      'https://babylon.market/api/onboarding/generate-profile',
+      {
+        headers: {
+          'accept': '*/*',
+          'accept-language': 'en-US,en;q=0.9',
+          'cookie': `privy-token=${token}`,
+          'referer': 'https://babylon.market/',
+          'user-agent': userAgent,
+          'sec-ch-ua': '"Chromium";v="142", "Brave";v="142", "Not_A Brand";v="99"',
+          'sec-ch-ua-mobile': '?0',
+          'sec-ch-ua-platform': '"Windows"',
+          'sec-fetch-dest': 'empty',
+          'sec-fetch-mode': 'cors',
+          'sec-fetch-site': 'same-origin',
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    const name = generateRandomName();
+    return {
+      name: name,
+      username: name.toLowerCase(),
+      bio: generateRandomBio()
+    };
+  }
+}
